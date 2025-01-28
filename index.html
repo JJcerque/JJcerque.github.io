@@ -1,0 +1,2451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAS - Nuamx</title>
+<style>
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #0a1929;
+    color: #ffffff;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+h1, h2, h3 {
+    color: #00a7e1;
+}
+/* Grid */
+.grid {
+    display: grid;
+    gap: 1rem;
+}
+@media (min-width: 768px) {
+    .grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+/* Card */
+.card {
+    background-color: #132f4c;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.card-header, .card-content, .card-footer {
+    padding: 1rem;
+    width: 100%;
+}
+.card-title {
+    margin: 0;
+    font-size: 1.25rem;
+}
+.card-description {
+    color: #d1d5db;
+    font-size: 0.875rem;
+}
+.card-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #00a7e1;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.btn:hover {
+    background-color: #0090c1;
+}
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid #00a7e1;
+}
+.btn-outline:hover {
+    background-color: #1e3a5f;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+}
+/* Dialog */
+.dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.dialog-content {
+    background-color: #132f4c;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+}
+/* Utilities */
+.hidden {
+    display: none;
+}
+.mt-4 {
+    margin-top: 1rem;
+}
+.mb-4 {
+    margin-bottom: 1rem;
+}
+/* Nuevos estilos para subtítulos */
+.subtitle {
+    color: #00a7e1;
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+.content-item {
+    margin-bottom: 1rem;
+}
+/* Nuevos estilos para la barra superior */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+.search-bar input {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.25rem 0 0 0.25rem;
+    width: 200px;
+}
+.search-bar button {
+    padding: 0.5rem 1rem;
+    background-color: #00a7e1;
+    color: #ffffff;
+    border: none;
+    border-radius: 0 0.25rem 0.25rem 0;
+    cursor: pointer;
+}
+.top-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+/* Estilos para resultados de búsqueda */
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #132f4c;
+    border-radius: 0.25rem;
+    border: 1px solid #1e3a5f;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+.search-result-item {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    color: #ffffff;
+}
+.search-result-item:hover {
+    background-color: #1e3a5f;
+}
+.search-results {
+    background-color: #0a1929;
+    border: 1px solid #1e3a5f;
+}
+/* Estilos para la página de preguntas frecuentes */
+.faq-list {
+    list-style-type: none;
+    padding: 0;
+}
+.faq-item {
+    margin-bottom: 1rem;
+}
+.faq-question {
+    background-color: #1e3a5f;
+    color: #ffffff;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.faq-question:hover {
+    background-color: #2a4d7d;
+}
+/* Nuevos estilos para la tarjeta de respuesta FAQ */
+.faq-answer-card {
+    background-color: #132f4c;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+}
+.faq-answer-card-header {
+    background-color: #1e3a5f;
+    padding: 1rem;
+    border-bottom: 1px solid #2a4d7d;
+}
+.faq-answer-card-content {
+    padding: 1rem;
+    color: #d1d5db;
+}
+/* Estilos para los botones de categorías de FAQ */
+.faq-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.faq-category-btn {
+    background-color: #1e3a5f;
+    color: #ffffff;
+    padding: 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    text-align: left;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.faq-category-btn:hover {
+    background-color: #2a4d7d;
+}
+/* Estilos para la página de enlaces frecuentes */
+.frequent-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+.link-card {
+    background-color: #1e3a5f;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.link-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+.link-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+.link-description {
+    font-size: 0.875rem;
+    color: #d1d5db;
+}
+/* Nuevos estilos para las secciones de enlaces */
+.link-section {
+    margin-bottom: 2rem;
+}
+.link-section h2 {
+    color: #00a7e1;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+.links-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+/* Nuevos estilos para el formulario de agregar/eliminar FAQ */
+.faq-form {
+    background-color: #132f4c;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+.faq-form select, .faq-form input, .faq-form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid #2a4d7d;
+    background-color: #1e3a5f;
+    color: #ffffff;
+}
+.faq-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #00a7e1;
+}
+.faq-form button {
+    margin-right: 0.5rem;
+}
+.faq-actions {
+    margin-bottom: 1rem;
+}
+.faq-actions .btn {
+    margin-right: 0.5rem;
+}
+
+
+
+/* Estilos para la lista de verificación */
+.checklist {
+    margin-bottom: 20px;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Estilos para los checkboxes */
+.checklist-item input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* Estilos para las etiquetas de los checkboxes */
+.checklist-item label {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Estilos para el mensaje de éxito */
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 15px;
+    font-weight: bold;
+    transition: opacity 0.3s ease;
+}
+
+.success-message::before {
+    content: '✓';
+    margin-right: 0.5rem;
+    font-size: 1.2em;
+}
+
+/* Clase para ocultar elementos */
+.hidden {
+    display: none;
+}
+
+
+
+/* Estilo para checkboxes marcados */
+.checklist-item input[type="checkbox"]:checked + label {
+    color: #28a745;
+}
+
+/* Estilos para las tablas de incidentes*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #2a4d7d;
+}
+th {
+    background-color: #1e3a5f;
+    color: #ffffff;
+}
+tr:hover {
+    background-color: #2a4d7d;
+}
+/* Estilos para las celdas */
+td {
+    background-color: #132f4c;
+    color: #d1d5db;
+}
+/* Estilos para la tabla en dispositivos móviles */
+@media (max-width: 768px) {
+    table {
+        font-size: 0.9rem;
+    }
+}
+
+/* Estilos Iframe */
+iframe {
+        width: 100%;
+        height: 600px; /* Ajusta la altura según sea necesario */
+        border: none;
+    }
+/* Estilos top bar*/
+
+.logo-container {
+    position: absolute;
+    top: 6%;
+    left: 70%;
+    right: 0;
+    width: 10;
+}
+
+.logo-container img {
+    max-width: 40%; /* Asegura que la imagen no exceda el ancho del contenedor */
+    height: 10%; /* Mantiene la proporción de la imagen */
+}
+</style>
+</head>
+<body>
+<div id="mainContent" class="container">
+<header class="mb-4">
+    <h1 id="mainTitle">CAS - Nuamx</h1>
+</header>
+
+<div id="countrySelection" class="grid grid-cols-3">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Colombia</h2>
+        </div>
+        <div class="card-content">
+            <img src="img/Colombia.png" alt="Bandera de Colombia" width="150" height="100">
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-block" onclick="selectCountry('Colombia')">Seleccionar</button>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Perú</h2>
+        </div>
+        <div class="card-content">
+            <img src="img/Peru.png" alt="Bandera de Perú" width="150" height="100">
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-block" onclick="selectCountry('Perú')">Seleccionar</button>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Chile</h2>
+        </div>
+        <div class="card-content">
+            <img src="img/Chile.png" alt="Bandera de Chile" width="150" height="100">
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-block" onclick="selectCountry('Chile')">Seleccionar</button>
+        </div>
+    </div>
+</div>
+
+<div id="countryContent" class="hidden">
+    <div class="logo-container">
+        <img src="img\nuamx.png" alt="Logo" width="150" height="150"> <!-- Ajusta el tamaño según sea necesario -->
+    </div>
+    <div class="top-bar">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar...">
+            <button onclick="search()">Buscar</button>
+            <div id="searchResults" class="search-results hidden"></div>
+        </div>
+        <div class="top-buttons">
+            <button id="homeButton" class="btn" onclick="goHome()">Home</button>
+            <button class="btn" onclick="showPage('faq')">Preguntas frecuentes</button>
+            <button class="btn" onclick="showPage('contacts')">Base de Contactos</button>
+            <button class="btn" onclick="showPage('links')">Enlaces frecuentes</button>
+        </div>
+    </div>
+    <div id="appsGrid" class="grid grid-cols-3"></div>
+</div>
+
+<div id="dialog" class="dialog hidden">
+    <div class="dialog-content">
+        <h2 id="dialogTitle"></h2>
+        <div id="dialogContent"></div>
+        <button class="btn mt-4" onclick="closeDialog()">Cerrar</button>
+    </div>
+</div>
+</div>
+
+
+
+<div id="generalidadesPage" class="container hidden">
+<header class="mb-4">
+    <h1 id="generalidadesTitle">Generalidades</h1>
+</header>
+<button class="btn mb-4" onclick="goBackToMain()">Volver</button>
+<div id="generalidadesContent" class="grid grid-cols-3 gap-4"></div>
+</div>
+
+<div id="faqPage" class="container hidden">
+    <header class="mb-4">
+        <h1>Preguntas Frecuentes</h1>
+    </header>
+    <button class="btn mb-4" onclick="goBackToMain()">Volver</button>
+    <div class="search-bar">
+        <input type="text" id="faqSearchInput" placeholder="Buscar en FAQ...">
+        <button onclick="searchFAQ()">Buscar FAQ</button>
+        <div id="faqSearchResults" class="search-results"></div>
+    </div>
+    <div id="faqCategories" class="grid grid-cols-3 gap-4 mt-4"></div>
+</div>
+
+<div id="faqAnswerPage" class="container hidden">
+<header class="mb-4">
+    <h1 id="faqCategoryTitle">Categoría de Preguntas Frecuentes</h1>
+</header>
+<button class="btn mb-4" onclick="goBackToFAQ()">Volver a  Categorías</button>
+<div id="faqAnswerList"></div>
+</div>
+
+<div id="individualAnswerPage" class="container hidden">
+<header class="mb-4">
+    <h1 id="individualQuestionTitle"></h1>
+</header>
+<div id="individualAnswerContent" class="card"></div>
+<button class="btn mt-4" onclick="goBackToFAQ()">Volver a Preguntas Frecuentes</button>
+</div>
+
+<div id="incidentDetailsPage" class="container hidden">
+  <header class="mb-4">
+    <h1 id="incidentDetailsTitle"></h1>
+  </header>
+  <button class="btn mb-4" onclick="goBackToIncidents()">Volver</button>
+  <div id="incidentDetailsContent"></div>
+</div>
+
+<div id="frequentLinksPage" class="container hidden">
+<header class="mb-4">
+    <h1>Enlaces Frecuentes</h1>
+</header>
+<button class="btn mb-4" onclick="goBackToMain()">Volver</button>
+<div id="frequentLinksContent"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script>
+const colombiaContent = {
+  generalidadesContent: {
+      "Master Trader": [
+          {
+              title: "Definición Master Trader",
+              content: "La pantalla Master Trader es una potente herramienta multimercado, la cual ofrece diferentes funcionalidades para automatizar las operatividad a través de órdenes predefinidas, generar algoritmos básicos para la ejecución de operaciones, realizar cargue masivo de órdenes y usar mecanismos avanzados de integración con Excel. Igualmente, cuenta con herramientas de portafolios y valoración en tiempo real que permiten hacer seguimiento de las estrategias de los operadores del  mercado."
+          },
+          {
+              title: "Tipos de usuarios o perfiles",
+              content: [
+                  {
+                      subtitle: "Administrador de Usuarios / Administrador de Usuarios backup:",
+                      description: "Usuario habilitado para realizar la solicitud de usuarios de la entidad, gestionar contraseñas y desbloqueo de usuarios en la plataforma Master Trader, crear usuarios en la plataforma Mec Plus Contingencia, y  ejercer control de filtros en la plataforma Master Trader. (No cuenta con modalidad operativa)"
+                  },
+                  {
+                      subtitle: "Administrador de Riesgos / Administrador de Riesgos backup:",
+                      description: "Usuario habilitado para realizar la administración de cupos de contraparte para deuda pública y deuda privada, renta variable y derivados, y ejercer el control de filtros de la plataforma Master Trader. (No cuenta con modalidad operativa)"
+                  },
+                  {
+                      subtitle: "Operador / Operador backup:",
+                      description: "Usuario habilitado para realizar la negociación de los mercados para los que la entidad a la que pertenece esté autorizada, a través de la plataforma Master Trader, también puede ser de segmento privado. (Cuenta con modalidad operativa)"
+                  },
+                  {
+                      subtitle: "Digitador / Digitador backup:",
+                      description: "Recibe instrucciones del usuario operador para el ingreso de órdenes. (Cuenta con modalidad operativa)"
+                  },
+                  {
+                      subtitle: "Visualización:",
+                      description: "Usuario habilitado para realizar la visualización de los mercados. (No cuenta con modalidad operativa)"
+                  }
+              ]
+          },
+          {
+              title: "Modalidades operativas",
+              content: [
+                  {
+                      subtitle: "PROPIA (H):",
+                      description:"Cuenta para afiliados que operan con títulos adquiridos con recursos propios."
+                  },
+                  {
+                      subtitle: "TERCEROS(C):",
+                      description: "Cuenta para operar en nombre de clientes de las firmas"
+                  },
+                  {
+                      subtitle: "CARTERAS COLECTIVAS(F):",
+                      description: "Cuenta para operar en nombre de fondos, portafolios o carteras colectivas y fondos mutuos"
+                  }
+              ]
+          }
+      ]
+  },
+  
+  // Definicion de los aplicativos
+  apps: [
+      { name: "Master Trader", incidents: ["Ips para pruebas de conectividad", "Sistema de instrumentos", "Botón rojo"] },
+      { name: "XW", incidents: ["Ips para pruebas de conectividad"] },
+      { name: "Back Office", incidents: ["Ips para pruebas de conectividad"] },
+      { name: "SAG", incidents: ["Ips para pruebas de conectividad"] },
+      { name: "Gestión de Usuarios", incidents: ["Master Trader", "XW", "SAG", "Back Office", "SIIDJ & Pagarés", "MEC Plus Manager", "MEC Siopel Contingencia"] }
+  ],
+  
+  
+  
+  
+  //Usuarios
+  userManagementOptions: {
+      "Master Trader": ["Generalidades", "Tipos de solicitudes", "Jerarquías"],
+      "XW": ["Generalidades", "Tipos de solicitudes", "Jerarquías"],
+      "SAG": ["Generalidades", "Tipos de solicitudes", "Jerarquías"],
+      "Back Office": ["Generalidades", "Tipos de solicitudes"],
+      "SIIDJ & Pagarés": ["Generalidades", "Tipos de solicitudes"],
+      "MEC Plus Manager": ["Generalidades", "Tipos de solicitudes"],
+      "MEC Siopel Contingencia": ["Generalidades", "Tipos de solicitudes"]
+  },
+  tiposSolicitudes: {
+      "Master Trader": [
+          "Creación de Usuario",
+          "Modificación de Usuario",
+          "Eliminación de Usuario",
+          "Suspension de Usuario",
+          "Reactivacion de Usuario"
+      ],
+      "XW": [
+        "Creación de Usuario",
+        "Modificación de Usuario",
+        "Eliminación de Usuario",
+        "Suspension de Usuario",
+        "Reactivacion de Usuario"
+      ],
+      "SAG": [
+        "Modificación de Usuario",
+        "Reinicialización de contraseña"
+      ],
+      "Back Office":[
+        "Creación de Usuario",
+        "Modificación de Usuario",
+        "Eliminación de Usuario",
+        "Reinicialización de contraseña"
+      ],
+      "MEC Plus Manager":[
+        "Reinicialización de contraseña"
+      ],
+      "MEC Siopel Contingencia":[
+        "Reinicialización de contraseña",
+        "Modificación de Usuario"
+      ]
+  },
+
+  creacionUsuarioOptions: {
+      "Master Trader": [
+          "Admin. Usuarios",
+          "Admin. Riesgos",
+          "Pats y Portafolio adicional",
+          "Usuario Operador",
+          "Afiliado/No afiliado",
+          "Operador Segmento Privado",
+          "Digitador",
+          "Visualizador"
+      ],
+      "XW": [
+        "Admin. Usuarios",
+        "Admin. Riesgos",
+        "Usuario Operador",
+        "Formador de liquidez",
+        "Digitador",
+        "Visualizador"
+      ],
+      "Back Office":[
+        "Admin. Usuarios"
+      ]
+  },
+  
+  modificacionUsuarioOptions: {
+    "Master Trader": [
+      "Cambio modalidad operativa digitador",
+      "Cambio modalidad operativa operador",
+      "Cambio Backup -> Principal / Cambio Principal -> Backup"
+    ],
+    "XW":[
+      "Perfil",
+      "Modalidad Operativa"
+    ],
+    "SAG":[
+      "Modificación de usuario administrador"
+    ],
+    "Back Office":[
+      "Cambio Backup -> Principal / Cambio Principal -> Backup"
+    ],
+    "MEC Siopel Contingencia":[
+      "Cambio Backup -> Principal / Cambio Principal -> Backup"
+    ]
+    
+  },
+
+  eliminacionUsuarioOptions: {
+    "Master Trader": [
+      "Admin. Usuarios",
+      "Admin. Riesgos",
+      "Pats y Portafolio adicional",
+      "Usuario Operador",
+      "Afiliado/No afiliado",
+      "Operador Segmento Privado",
+      "Digitador",
+      "Visualizador"
+    ],
+    "XW":[
+      "Admin. Usuarios",
+      "Admin. Riesgos",
+      "Usuario Operador",
+      "Digitador",
+      "Visualizador"
+    ],
+    "Back Office":[
+      "Admin. Usuarios"
+    ]
+  },
+  
+  suspensionUsuarioOptions: {
+    "Master Trader": [
+      "Admin. Usuarios",
+      "Admin. Riesgos",
+      "Pats y Portafolio adicional",
+      "Usuario Operador",
+      "Afiliado/No afiliado",
+      "Operador Segmento Privado",
+      "Digitador",
+      "Visualizador"
+    ],
+     "XW":[
+        "Admin. Usuarios",
+        "Admin. Riesgos",
+        "Usuario Operador",
+        "Formador de liquidez",
+        "Digitador",
+        "Visualizador"
+    ]
+  },
+  
+  reactivacionUsuarioOptions: {
+    "Master Trader": [
+      "Admin. Usuarios",
+      "Admin. Riesgos",
+      "Pats y Portafolio adicional",
+      "Usuario Operador",
+      "Afiliado/No afiliado",
+      "Operador Segmento Privado",
+      "Digitador",
+      "Visualizador"
+    ],
+     "XW":[
+        "Admin. Usuarios",
+        "Admin. Riesgos",
+        "Usuario Operador",
+        "Formador de liquidez",
+        "Digitador",
+        "Visualizador"
+    ]
+  },
+  
+  reinicializacionContraseña:{
+    "SAG":[
+      "Admin. Usuarios"
+    ],
+    "Back Office":[
+      "Admin. Usuarios"
+    ],
+    "MEC Plus Manager":[
+      "Admin. Usuarios",
+      "Admin. Riesgos"
+    ],
+    "MEC Siopel Contingencia":[
+      "Admin. Usuarios",
+    ]
+  },
+
+  userTypeChecklists: {
+    "Master Trader": {
+      "Creación de Usuario": {
+        "Admin. Usuarios": [
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Representante Legal",
+          "Certificado de existencia Representante legal(30 días)",
+          "Filas de los mercados a crear"
+        ],
+        "Admin. Riesgos":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",
+          "Filas de los mercados a crear"
+        ],
+        "Pats y Portafolio adicional":[
+          "Formato 0746",
+          "Firma Usuario Admin actual"
+        ],
+        "Usuario Operador":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa",
+          "Validar que esté presentado",
+          "Filas de los mercados a crear"
+        ],
+        "Afiliado/No afiliado":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa",
+        ],
+        "Operador Segmento Privado":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa",
+          "Validar que esté presentado",
+          "Filas de los mercados a crear"
+        ],
+        "Digitador":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa",
+          "Validar que esté presentado",
+          "Filas de los mercados a crear"
+        ],
+        "Visualizador":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa",
+          "Filas de los mercados a crear"
+        ]
+      },
+      "Modificación de Usuario": {
+        "Cambio modalidad operativa digitador":[
+          "Formato 0746",
+          "Firma del Usuario a modificar",
+          "ID usuario",
+          "Firma del Usuario admin actual"
+        ],
+        "Cambio modalidad operativa operador":[
+          "Formato 0746",
+          "Firma del Usuario a modificar",
+          "ID usuario",
+          "Firma del Usuario admin actual"
+        ],
+        "Cambio Backup -> Principal / Cambio Principal -> Backup":[
+          "Formato 0746",
+          "ID usuario",
+          "Firma del Usuario admin actual"
+        ]
+      },
+      "Eliminación de Usuario": {
+        "Admin. Usuarios":[
+          "Formato 0746",
+          "Filas de los mercados a eliminar"
+        ],
+        "Admin. Riesgos":[
+          "Formato 0746",
+          "Firma Usuario Admin actual",
+          "Filas de los mercados a eliminar"
+        ],
+        "Pats y Portafolio adicional":[
+          "Formato 0746",
+          "Firma Usuario Admin actual"
+        ],
+        "Usuario Operador":[
+          "Formato 0746",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa",
+          "Filas de los mercados a eliminar"
+        ],
+        "Afiliado/No afiliado":[
+          "Formato 0746",
+          "Firma del usuario a eliminar",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa"
+        ],
+        "Operador Segmento Privado":[
+          "Formato 0746",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa"
+        ],
+        "Digitador":[
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa"
+        ],
+        "Visualizador":[
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa"
+        ]  
+      },
+      "Suspension de Usuario": {
+        "Admin. Usuarios": [
+          "Formato 0746",
+          "Filas de los mercados a crear"
+        ],
+        "Admin. Riesgos":[
+          "Formato 0746",
+          "Firma Usuario Admin actual",
+          "Filas de los mercados a suspender"
+        ],
+        "Pats y Portafolio adicional":[
+          "Formato 0746",
+          "Firma Usuario Admin actual"
+        ],
+        "Usuario Operador":[
+          "Formato 0746",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa",
+          "Filas de los mercados a suspender"
+        ],
+        "Afiliado/No afiliado":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa"
+        ],
+        "Operador Segmento Privado":[
+          "Formato 0746",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa"
+        ],
+        "Digitador":[
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa"
+        ],
+        "Visualizador":[
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa"
+        ]  
+      },
+      "Reactivacion de Usuario": {
+        "Admin. Usuarios": [
+          "Formato 0746",
+          "Filas de los mercados a reactivar"
+        ],
+        "Admin. Riesgos":[
+          "Formato 0746",
+          "Firma Usuario Admin actual",
+          "Filas de los mercados a reactivar"
+        ],
+        "Pats y Portafolio adicional":[
+          "Formato 0746",
+          "Firma Usuario Admin actual"
+        ],
+        "Usuario Operador":[
+          "Formato 0746",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa",
+          "Filas de los mercados a reactivar"
+        ],
+        "Afiliado/No afiliado":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",          "Diligenciar modalidad operativa"
+        ],
+        "Operador Segmento Privado":[
+          "Formato 0746",
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa"
+        ],
+        "Digitador":[
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa"
+        ],
+        "Visualizador":[
+          "Firma Usuario Admin actual",
+          "Diligenciar modalidad operativa"
+        ]  
+      }
+    },
+    "XW": {
+      "Creación de Usuario":{
+        "Admin. Usuarios": [
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Representante Legal",
+          "Certificado de existencia Representante legal(30 días)"
+        ],
+        "Admin. Riesgos":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual"
+        ],
+        "Usuario Operador":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",
+          "Modalidad operativa",
+          "Filas de los mercados a crear"
+        ],
+        "Formador de liquidez":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",
+          "Modalidad operativa",
+          "Carta de solicitud de admisión como formador de liquidez"  
+        ],
+        "Digitador":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual",
+          "Modalidad operativa",
+          "Filas de los mercados a crear"
+        ],
+        "Visualizador":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Fotocopia CC",
+          "Firma Usuario Admin actual"
+        ]
+      },
+    "Modificación de Usuario":{
+        "Perfil": [
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Firma Usuario Admin actual",
+          "Modalidad operativa",
+          "ID usuario",
+          "Firma Representante Legal(si es de operador a admin)",
+          "Certificado de existencia Representante legal(30 días si es de operador a admin)"
+        ],
+        "Modalidad Operativa":[
+          "Formato 0746",
+          "Firma del usuario a crear",
+          "Firma Usuario Admin actual",
+          "Modalidad operativa",
+          "ID usuario"
+        ]
+    },
+    "Eliminación de Usuario":{
+        "Admin. Usuarios":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a Eliminar" 
+        ],
+        "Admin. Riesgos":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a Eliminar"         
+        ],
+        "Usuario Operador":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a Eliminar" 
+        ],
+        "Digitador":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a Eliminar"  
+        ],
+        "Visualizador":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a Eliminar" 
+        ]
+    },
+    "Suspension de Usuario":{
+        "Admin. Usuarios":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a suspender" 
+        ],
+        "Admin. Riesgos":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a suspender"         
+        ],
+        "Usuario Operador":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a suspender" 
+        ],
+        "Digitador":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a suspender"  
+        ],
+        "Visualizador":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a suspender" 
+        ],
+        "Formador de liquidez":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a suspender" 
+        ]
+    },
+    "Reactivacion de Usuario":{
+        "Admin. Usuarios":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a reactivar" 
+        ],
+        "Admin. Riesgos":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a reactivar"         
+        ],
+        "Usuario Operador":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a reactivar" 
+        ],
+        "Digitador":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a reactivar"  
+        ],
+        "Visualizador":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a reactivar" 
+        ],
+        "Formador de liquidez":[
+            "Formato 0746",
+            "Firma Usuario Admin actual",
+            "ID usuario",
+            "Filas de los mercados a reactivar" 
+        ]
+     }  
+    },
+    
+     "SAG": {
+      "Modificación de Usuario":{
+        "Modificación de usuario administrador":[
+            "Formato 0746",
+            "Firma del usuario a crear",
+            "Fotocopia CC",
+            "Firma Representante Legal",
+            "Certificado de existencia Representante legal(30 días)"
+        ]       
+      },
+        "Reinicialización de contraseña":{
+          "Admin. Usuarios":[
+            "Formato 0746",
+            "Firma Usuario Admin actual"
+        ]
+      }
+    },
+      "Back Office": {
+        "Creación de Usuario":{
+          "Admin. Usuarios": [
+            "Formato 0746",
+            "Firma del usuario a crear",
+            "Fotocopia CC",
+            "Firma Representante Legal",
+            "Certificado de existencia Representante legal(30 días)"
+        ]
+        },
+        "Modificación de Usuario":{
+            "Cambio Backup -> Principal / Cambio Principal -> Backup":[
+              "Formato 0746",
+              "ID usuario",
+              "Firma del Usuario admin actual"
+        ]
+        },
+        "Reinicialización de contraseña":{
+          "Admin. Usuarios":[
+            "Formato 0746",
+            "ID usuario",
+            "Firma Usuario Admin actual"
+        ]
+        },
+        "Eliminación de Usuario":{
+            "Admin. Usuarios":[
+              "Formato 0746",
+              "Firma Usuario Admin actual",
+              "ID usuario",
+              "Filas de los mercados a eliminar" 
+        ]
+    }    
+   },
+      "MEC Plus Manager": {
+        "Reinicialización de contraseña":{
+          "Admin. Usuarios":[
+            "Formato 0746",
+            "ID usuario",
+            "Firma Usuario Admin actual"
+          ],
+          "Admin. Riesgos":[
+            "Formato 0746",
+            "ID usuario",
+            "Firma Usuario Admin actual"
+          ]
+      }
+    },
+       "MEC Siopel Contingencia":{
+          "Modificación de Usuario":{
+            "Cambio Backup -> Principal / Cambio Principal -> Backup":[
+              "Formato 0746",
+              "ID usuario",
+              "Firma del Usuario admin actual"
+            ]            
+        },
+          "Reinicialización de contraseña":{
+            "Admin. Usuarios":[
+              "Formato 0746",
+              "ID usuario",
+              "Firma Usuario Admin actual"
+            ],
+      }
+    }
+  }
+};
+
+const peruContent = {
+apps: [
+    { name: "Sistema de Negociación", incidents: ["Problema de conexión", "Error en órdenes", "Falla en cotizaciones"] },
+    { name: "Gestión de Riesgos", incidents: ["Actualización de límites", "Reporte de exposición", "Cálculo de garantías"] },
+    { name: "Compensación y Liquidación", incidents: ["Retraso en liquidación", "Discrepancia en saldos", "Falla en neteo"] }
+]
+};
+
+const chileContent = {
+apps: [
+    { name: "Plataforma de Trading", incidents: ["Latencia alta", "Fallo en ejecución", "Problemas de visualización"] },
+    { name: "Sistema de Custodia", incidents: ["Error en transferencias", "Actualización de posiciones", "Falla en reportes"] },
+    { name: "Monitoreo de Mercado", incidents: ["Alerta de volatilidad", "Detección de operaciones inusuales", "Fallo en tiempo real"] }
+]
+};
+
+const frequentLinks = {
+documentos: [
+    {
+        title: "Hostnames",
+        icon: "🔗",
+        description: "Excel de Hostnames activos",
+        url: "https://bolsadesantiago-my.sharepoint.com/:x:/r/personal/angie_ramirez_nuamx_com/_layouts/15/Doc.aspx?sourcedoc=%7B90406948-CAAE-4721-BC8B-94F76C45CB47%7D&file=HOSTNAME%20-%20ACTIVOS.xlsx"
+    },
+    {
+        title: "Seguimiento a2censo",
+        icon: "📊",
+        description: "Seguimiento moras campañas de a2censo",
+        url: "https://bolsadesantiago.sharepoint.com/:x:/s/BVC-a2censo-SD/EdJtcPO4mDhdqJHUaHOHnr4BuqODjHeNIWs8jvYQV_OOIQ"
+    },
+    {
+        title: "Consultas Frecuentes",
+        icon: "📑",
+        description: "Documento de consulta frecuente",
+        url: "https://bolsadesantiago-my.sharepoint.com/:x:/r/personal/luseydi_leyva_nuamx_com/_layouts/15/Doc.aspx?sourcedoc=%7B336A0250-8074-479A-964C-616DD6C7B06F%7D"
+    },
+    {
+        title: "Emisores",
+        icon: "📋",
+        description: "Emisores con contrato",
+        url: "https://bolsadesantiago-my.sharepoint.com/:x:/g/personal/andrea_mazo_nuamx_com/EdUTDGwJJ99LkTfZhs3NvwoBYxCzqLm5RWFhevdVc9o_JQ"
+    },
+    {
+        title: "Cronograma CAS",
+        icon: "📅",
+        description: "Cronograma de operación CAS",
+        url: "https://bolsadesantiago-my.sharepoint.com/:x:/r/personal/paula_solano_nuamx_com/_layouts/15/Doc.aspx?sourcedoc=%7BFB08B759-E5A4-4BD9-9119-D3293B7C1F5D%7D"
+    },
+    {
+        title: "Base Funcionarios",
+        icon: "👥",
+        description: "Base de funcionarios presentados ante Bolsa",
+        url: "https://bolsadesantiago-my.sharepoint.com/:x:/r/personal/luzcena_mayorga_nuamx_com/_layouts/15/Doc.aspx?sourcedoc=%7BC41778A3-5F52-4C08-84CB-25E5C9D7988F%7D"
+    },
+    {
+        title: "Correos por Área",
+        icon: "📧",
+        description: "Directorio de correos por área",
+        url: "https://bolsadesantiago-my.sharepoint.com/:x:/g/personal/luseydi_leyva_nuamx_com/EVACajN0gJpHlkxhbdbHsG8B6sU-zpj-wETMGAx8sKM_hQ"
+    },
+    {
+        title: "Formato 0746 - Gestión de usuarios",
+        icon: "🛡️",
+        description: "Formato de usuarios",
+        url: "https://www.bvc.com.co/documentos-post-negociacion?tab=mantenimiento-de-usuarios-y-aplicativos"
+    },
+    {
+        title: "Manual SAG",
+        icon: "🌐",
+        description: "Manual SAG - Uso y problemas",
+        url: "https://bolsadesantiago-my.sharepoint.com/:w:/r/personal/daniel_duque_nuamx_com/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7B6859ba77-ca85-46dd-8f68-44ee4ff59d29%7D&wdOrigin=TEAMS-WEB.undefined_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1735836542188&web=1"
+    }
+
+],
+sistemas: [
+    {
+        title: "Genesys",
+        icon: "🗣️",
+        description: "Herramienta - Llamadas y correos",
+        url: "https://login.mypurecloud.ie/#/authenticate"
+    },
+    {
+        title: "Jira",
+        icon: "🎫",
+        description: "Service Desk Nuam",
+        url: "https://servicedesk.nuamx.com/servicedesk/customer/portal/10"
+    },
+    {
+        title: "GestiónDOC",
+        icon: "📁",
+        description: "Sistema de Gestión Documental",
+        url: "https://gestiondoc.bvc.com.co/TMS.Solution.GESTIONDOC/(SwgUB8M7)/MN/es//Home/Corporativo"
+    },
+    {
+        title: "XAI",
+        icon: "🔐",
+        description: "Gestión de usuarios XAI",
+        url: "http://192.168.175.51:9000/xai/data/users"
+    },
+    {
+        title: "SIIDJ",
+        icon: "⚖️",
+        description: "SIIDJ Producción",
+        url: "https://10.253.197.195/"
+    },
+    {
+        title: "SIIDJ Contingencia",
+        icon: "🛠️",
+        description: "SIIDJ Contingencia",
+        url: "https://10.253.197.195/"
+    },
+    {
+        title: "Tenant",
+        icon: "🔍",
+        description: "Tenant / Gesti[on usuarios SIIDJ y Pagarés",
+        url: "https://bvc.us.trustedauth.com/#/?redirect=/user/1005449665"
+    },
+    {
+        title: "Invoway Deceval",
+        icon: "📠",
+        description: "Emitir Facturas Deceval",
+        url: "https://cli.invoway.com/cliente?DECEVAL"
+    },
+    {
+        title: "Invoway Bolsa",
+        icon: "⚙️",
+        description: "Emitir facturas Bolsa",
+        url: "https://cli.invoway.com/cliente?BVC"
+    },
+    {
+        title: "Jasper",
+        icon: "🖨️",
+        description: "A2censo",
+        url: "https://informes.a2censo.com/jasperserver-pro/login.html"
+    },
+    {
+        title: "Zoho",
+        icon: "💵",
+        description: "Envío comunicados masivos",
+        url: "https://campaigns.zoho.com/campaigns/org842250930/home.do#emailcampaign/all"
+    },
+    {
+        title: "STA",
+        icon: "🗄️",
+        description: "Inscripción de terminales",
+        url: "https://192.168.177.138/webclient/Login.xhtml"
+    },
+    {
+        title: "Pagarés",
+        icon: "📝",
+        description: "Revisión del sistema",
+        url: "https://pagares.bvc.com.co:1445/pagares/faces/jsp/girador/administracion_girador/modificacion/modificar_buscar_giradores_deceval.jsp?reset=1"
+    },
+    {
+        title: "Polaris",
+        icon: "📑",
+        description: "Documentos",
+        url: "https://polaris.binaps.cloud/bvc/inicial.iface"
+    },
+    {
+        title: "Salesforce",
+        icon: "🧮",
+        description: "Salesforce",
+        url: "https://bvc.my.salesforce.com/"
+    }
+
+],
+recursos: [
+    {
+        title: "Instaladores BVC",
+        icon: "💾",
+        description: "Instaladores y manuales",
+        url: "https://www.bvc.com.co/instaladores-y-manuales?tab=master-trader"
+    },
+    {
+        title: "SFTP",
+        icon: "🔒",
+        description: "DOMINIO SFPT (DNS)",
+        url: "https://sftp.pagares.bvc.com.co/"
+    },
+    {
+        title: "Educación",
+        icon: "📚",
+        description: "Link de Educación BVC",
+        url: "https://aprende.bvc.com.co/"
+    }
+]
+};
+
+//Preguntas frecuentes
+
+function generateId(category, index) {
+const prefix = category === "a2censo" ? "PFA" : "PF" + category.substring(0, 2).toUpperCase();
+return `${prefix}${(index + 1).toString().padStart(3, '0')}`;
+}
+
+let selectedCountry = null;
+let selectedApp = null;
+let selectedUserManagementApp = null;
+let currentCategory = '';
+
+async function loadFAQFromExcel() {
+    try {
+        const response = await fetch("PF.xlsx");
+        const arrayBuffer = await response.arrayBuffer();
+        const data = new Uint8Array(arrayBuffer);
+        const workbook = XLSX.read(data, {type: 'array'});
+        
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(sheet);
+
+        faqData = {};
+        faqCategories = [];
+
+        jsonData.forEach((row, index) => {
+            const category = row.Categoria;
+            if (!faqCategories.includes(category)) {
+                faqCategories.push(category);
+                faqData[category] = [];
+            }
+
+            faqData[category].push({
+                id: generateId(category, faqData[category].length),
+                question: row.Pregunta,
+                answer: row.Respuesta
+            });
+        });
+
+        console.log('FAQ data loaded successfully');
+    } catch (error) {
+        console.error('Error loading FAQ data:', error);
+    }
+}
+
+let faqCategories = [
+    "Atención al accionista", "a2censo", "Renta variable TTV OTC", "e-bvc", "Factura electrónica",
+    "Renta fija", "Educación", "Derivados", "General bvc", "Renta Variable",
+    "Administración de emisiones", "Administración de instrumentos", "Correos masivos",
+    "Cumplimiento", "Datos personales", "Derechos patrimoniales y cierre",
+    "Emisiones Renta Fija", "Emisiones Renta Variable", "Enajenaciones", "Estudiantes",
+    "Garantías", "Gestión comercial", "Gestión de cobros y tesorería",
+    "Gestión de Usuarios SIIDJ", "Gestión del servicio", "Gestión tecnológica",
+    "Informe Bursátil público", "Informe no público", "Inmovilización Títulos Físicos",
+    "Inversionista", "Oficina virtual", "Simulacro ATL", "OPA",
+    "Operación Especial ADR", "Operaciones Especiales", "Pagarés", "Procesos legales",
+    "Pública", "Reserva bursátil", "TIDIS y Bonos pensionales",
+    "Gestión de Plantillas Plataforma Vinculación", "Servicios WEB - SIIDJ",
+    "Emisores, depositantes, administradores", "Gestión del servicio PACTA SIGN"
+];
+loadFAQFromExcel();
+faqData = {};
+
+faqData = {};
+faqCategories.forEach(category => {
+    faqData[category] = [{
+        id: generateId(category, 0),
+        question: `¿Qué es ${category}?`,
+        answer: `Esta es una pregunta de ejemplo para la categoría ${category}. La respuesta real se proporcionará próximamente.`
+    }];
+});
+faqData = {
+    "Atención al accionista": [
+    {
+        id: "PFAC01",
+        question: "¿Cómo puedo actualizar mis datos como accionista?",
+        answer: "Puede actualizar sus datos contactando a nuestro departamento de atención al accionista a través del correo electrónico atencion.accionista@example.com o llamando al número 123-456-7890."
+    },
+    {
+        id: "PFAC02",
+        question: "¿Cuándo se pagan los dividendos?",
+        answer: "Las fechas de pago de dividendos se anuncian en nuestra página web y se comunican directamente a los accionistas. Generalmente, los dividendos se pagan trimestralmente, sujeto a la aprobación de la junta directiva."
+    },
+    
+    ],
+
+  "a2censo": [
+    {
+        id: "PFA001",
+        question: "¿Qué es a2censo?",
+        answer: "a2censo es una plataforma de financiación colaborativa (crowdfunding) que conecta a pequeñas y medianas empresas con inversionistas para impulsar el crecimiento empresarial en Colombia."
+    },
+    {
+        id: "PFA002",
+        question: "¿Cómo puedo invertir en a2censo?",
+        answer: "Para invertir en a2censo, debe registrarse en la plataforma, verificar su identidad, y luego podrá explorar los proyectos disponibles y realizar inversiones desde 200.000 pesos colombianos."
+    }
+    ],
+
+  "Administración de emisiones": [
+    {
+        id: "PFAE01",
+        question: "¿Por qué me aparece en la información exogena de la DIAN?",
+        answer: "Con el fin de dar claridad sobre la información exógena descargada de la página de la DIAN, queremos manifestarle que deceval está sujeto al cumplimiento de la resolución 000098 del 28 de octubre de 2020 (capítulo 2), nosotros como entidad estamos en la obligación de reportar a la Dirección de Impuestos y Aduanas Nacionales (DIAN) los valores que un inversionista posee registrados en nuestros sistemas, así como los rendimientos o dividendos cancelados por parte de los emisores a través de deceval. Diga información reportada a la DIAN es informativa y se ha reportado a dicha entidad (DIAN) para que no muestre los datos reportados por el depósito para evitar confusiones de los inversionsitas. Se le puede responder esto al inversionista, verbalmente o por escrito pero esta fuera del alcance del depósito"
+    }
+    ],
+
+}
+
+
+
+//Función de selección de país
+function selectCountry(country) {
+    console.log("Seleccionando país:", country);
+    selectedCountry = country;
+    document.getElementById('countrySelection').classList.add('hidden');
+    document.getElementById('countryContent').classList.remove('hidden');
+    document.getElementById('mainTitle').textContent = `CAS - Nuamx - ${country}`;
+    renderApps();
+    const topButtons = document.querySelector('.top-buttons');
+    if (topButtons) {
+        if (country !== 'Colombia') {
+            topButtons.classList.add('hidden');
+        } else {
+            topButtons.classList.remove('hidden');
+        }
+    }
+}
+
+//Funcion muestra pais seleccionado
+function renderApps() {
+    console.log("Renderizando apps para:", selectedCountry);
+    const appsGrid = document.getElementById('appsGrid');
+    if (!appsGrid) {
+        console.error("El elemento 'appsGrid' no se encontró");
+        return;
+    }
+    appsGrid.innerHTML = '';
+    let content;
+    switch(selectedCountry) {
+        case 'Colombia':
+            content = colombiaContent;
+            break;
+        case 'Perú':
+            content = peruContent;
+            break;
+        case 'Chile':
+            content = chileContent;
+            break;
+        default:
+            console.error("País no reconocido:", selectedCountry);
+            return;
+    }
+    content.apps.forEach(app => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card-header">
+                <h2 class="card-title">${app.name}</h2>
+                <p class="card-description">
+                    ${app.name === "Gestión de Usuarios" && selectedCountry === "Colombia"
+                        ? "Gestione los procesos de usuarios"
+                        : "Información para problemas de aplicativo"
+                    }
+                </p>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-block" onclick="showIncidents('${app.name}')">
+                    ${app.name === "Gestión de Usuarios" && selectedCountry === "Colombia" ? "Ver" : "Ver"}
+                </button>
+            </div>
+        `;
+        appsGrid.appendChild(card);
+    });
+}
+
+function showIncidents(appName) {
+  selectedApp = appName;
+  const content = colombiaContent;
+  const app = content.apps.find(a => a.name === appName);
+  const dialogTitle = document.getElementById('dialogTitle');
+  const dialogContent = document.getElementById('dialogContent');
+
+  dialogTitle.textContent = app.name === "Gestión de Usuarios" 
+    ? "Seleccione una aplicación" 
+    : `Incidentes - ${app.name}`;
+
+  dialogContent.innerHTML = '';
+  if (app.name === "Gestión de Usuarios") {
+    app.incidents.forEach(incident => {
+      const button = document.createElement('button');
+      button.className = 'btn btn-outline btn-block mb-4';
+      button.textContent = incident;
+      button.onclick = () => showUserManagementOptions(incident);
+      dialogContent.appendChild(button);
+    });
+  } else {
+    app.incidents.forEach(incident => {
+      const button = document.createElement('button');
+      button.className = 'btn btn-outline btn-block mb-4';
+      button.textContent = incident;
+      button.onclick = () => showIncidentDetails(appName, incident);
+      dialogContent.appendChild(button);
+    });
+  }
+
+  document.getElementById('dialog').classList.remove('hidden');
+}
+
+function showIncidentDetails(appName, incidentName) {
+  document.getElementById('mainContent').classList.add('hidden');
+  document.getElementById('dialog').classList.add('hidden');
+  document.getElementById('incidentDetailsPage').classList.remove('hidden');
+  
+  const detailsTitle = document.getElementById('incidentDetailsTitle');
+  const detailsContent = document.getElementById('incidentDetailsContent');
+
+  detailsTitle.textContent = `${appName} - ${incidentName}`;
+  detailsContent.innerHTML = getIncidentContent(appName, incidentName);
+}
+
+function getIncidentContent(appName, incidentName) {
+  // Especificar contenido para cada incidente
+  let content = '';
+  
+  //Master Trader
+  if (appName === 'Master Trader') {
+    // Incidente 1
+    if (incidentName === 'Sistema de instrumentos') {
+      content = `
+        <div class="logo-container">
+            <img src="img/nuamx.png" alt="Logo" width="150" height="auto"> <!-- Ajusta el tamaño según sea necesario -->
+        </div>
+        <h2>Sistema de instrumentos</h2>
+        <p>Este incidente se refiere a problemas relacionados con el sistema de instrumentos en Master Trader.</p>
+        <ul>
+          <li>Verificar la conexión con el servidor de instrumentos.</li>
+          <li>Comprobar la actualización de precios en tiempo real.</li>
+          <li>Revisar la sincronización de datos de instrumentos.</li>
+        </ul>
+      `;
+      // Incidente 2
+    } else if (incidentName === 'Botón rojo') {
+      content = `
+        <div class="logo-container">
+            <img src="img/nuamx.png" alt="Logo" width="150" height="auto"> <!-- Ajusta el tamaño según sea necesario -->
+        </div>
+        <h2>Botón rojo</h2>
+        <p>El botón rojo es una función crítica en Master Trader para situaciones de emergencia.</p>
+        <ol>
+          <li>Verificar la conectividad del botón rojo con el sistema central.</li>
+          <li>Comprobar los permisos del usuario para activar el botón rojo.</li>
+          <li>Revisar los logs de activación del botón rojo.</li>
+        </ol>
+      `;
+      // Incidente 3
+    } else if (incidentName === 'Ips para pruebas de conectividad') {
+      content = `
+        <div class="logo-container">
+            <img src="img/nuamx.png" alt="Logo" width="150" height="auto"> <!-- Ajusta el tamaño según sea necesario -->
+        </div>
+        <h2>Ips para pruebas de conectividad</h2>
+        <p>Ips que la entidad debe asegurar permisos de FW y realizar las correspondientes pruebas.</p>
+        <ol>
+          <li>Ping</li>
+          <li>Telnet</li>
+          <li>Tracert</li>
+          <li>IP NAT</li>
+          <li>Hostname</li>
+          <li>Master Trader.ini</li>
+          <li>Logs del día del error(Max y Max>Upd)</li>
+        </ol>
+        <div class="container">
+        <h2>IP MT</h2>
+       <iframe width="700" height="500" frameborder="0" scrolling="no" src="https://bolsadesantiago-my.sharepoint.com/personal/luseydi_leyva_nuamx_com/_layouts/15/Doc.aspx?sourcedoc={336a0250-8074-479a-964c-616dd6c7b06f}&action=embedview&ActiveCell='IP%20MT'!G10&wdHideGridlines=True&wdInConfigurator=True&wdInConfigurator=True"></iframe>
+        </div>
+        
+      `;
+    }
+    
+    // Incidentes de XW
+  } else if (appName === 'XW') {
+        // Incidente XW
+        if (incidentName === 'Ips para pruebas de conectividad') {
+        content = `
+            <div class="logo-container">
+                <img src="img/nuamx.png" alt="Logo" width="150" height="auto"> <!-- Ajusta el tamaño según sea necesario -->
+            </div>
+            <h2>Ips para pruebas de conectividad</h2>
+            <p>Ips que la entidad debe asegurar permisos de FW y realizar las correspondientes pruebas.</p>
+            <ol>
+            <li>Ping</li>
+            <li>Telnet</li>
+            <li>Tracert</li>
+            </ol>
+            <iframe width="700" height="500" frameborder="0" scrolling="no" src="https://bolsadesantiago-my.sharepoint.com/personal/luseydi_leyva_nuamx_com/_layouts/15/Doc.aspx?sourcedoc={336a0250-8074-479a-964c-616dd6c7b06f}&action=embedview&wdAllowInteractivity=False&ActiveCell='IP%20XW'!A3&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True"></iframe>
+            `;
+        }
+    // Incidentes de Back Office
+  } else if (appName  == "Back Office"){
+        if (incidentName === 'Ips para pruebas de conectividad') {
+            content = `
+                <div class="logo-container">
+                    <img src="img/nuamx.png" alt="Logo" width="150" height="auto"> <!-- Ajusta el tamaño según sea necesario -->
+                </div>
+                <h2>Ips para pruebas de conectividad para Back Office</h2>
+                <p>Ips que la entidad debe asegurar permisos de FW y realizar las correspondientes pruebas.</p>
+                <ol>
+                <li>Ping</li>
+                <li>Tracert</li>
+                </ol>
+                <table>
+                    <tr>
+                        <th>Servidores</th>
+                        <th>Puertos</th>
+                    </tr>
+                    <tr>
+                        <td>10.240.247.39</td>
+                        <td>2001 tcp</td>
+                    </tr>
+                    <tr>
+                        <td>10.240.247.40</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>10.240.247.41</td>
+                        <td>2002 tcp</td>
+                    </tr>
+                    <tr>
+                        <td>10.240.247.42</td>
+                        <td></td>
+                    </tr>
+                </table>
+                <p>Adicionalmente solicitarle a la entidad: </p>
+                <ol>
+                <li>IP NAT("10.x.x.x")</li>
+                <li>Logs del día del incidente</li>
+                </ol>
+            `;
+        }
+    // Incidentes de SAG
+  } else if (appName == "SAG"){
+        if (incidentName === 'Ips para pruebas de conectividad') {
+                content = `
+                    <div class="logo-container">
+                        <img src="img/nuamx.png" alt="Logo" width="150" height="auto"> <!-- Ajusta el tamaño según sea necesario -->
+                    </div>
+                    <h2>Ips para pruebas de conectividad para SAG</h2>
+                    <p>Ips que la entidad debe asegurar permisos de FW y realizar las correspondientes pruebas.</p>
+                    <ol>
+                    <li>Ping - ping sagalt.bvc.com.co</li>
+                    <li>Telnet - telnet sagalt.bvc.com.co con el puerto (53001-53002-53003, 80 y 443)</li>
+                    </ol>
+                `;
+        }
+  }
+
+  if (content === '') {
+    content = `
+    <div class="logo-container">
+        <img src="img/nuamx.png" alt="Logo" width="150" height="auto"> <!-- Ajusta el tamaño según sea necesario -->
+    </div>
+    <p>No se ha definido contenido específico para este incidente aún.</p>`;
+  }
+
+  return content;
+}
+
+function goBackToIncidents() {
+  document.getElementById('incidentDetailsPage').classList.add('hidden');
+  document.getElementById('mainContent').classList.remove('hidden');
+  document.getElementById('dialog').classList.remove('hidden');
+}
+
+function showUserManagementOptions(appName) {
+    selectedUserManagementApp = appName;
+    const options = colombiaContent.userManagementOptions[appName];
+    const dialogTitle = document.getElementById('dialogTitle');
+    const dialogContent = document.getElementById('dialogContent');
+    
+    dialogTitle.textContent = `Opciones para ${appName}`;
+    dialogContent.innerHTML = '';
+    
+    options.forEach(option => {
+        const button = document.createElement('button');
+        button.className = 'btn btn-outline btn-block mb-4';
+        button.textContent = option;
+        button.onclick = () => {
+            if (option === "Tipos de solicitudes") {
+                showTiposSolicitudes(appName);
+            } else if (option === "Generalidades") {
+                showGeneralidades(appName);
+            }
+        };
+        dialogContent.appendChild(button);
+    });
+
+    // Agregar botón de regresar
+    const backButton = document.createElement('button');
+    backButton.className = 'btn btn-outline btn-block mb-4';
+    backButton.textContent = 'Regresar';
+    backButton.onclick = () => showIncidents("Gestión de Usuarios");
+    dialogContent.appendChild(backButton);
+}
+
+function showTiposSolicitudes(appName) {
+    const tipos = colombiaContent.tiposSolicitudes[appName];
+    const dialogTitle = document.getElementById('dialogTitle');
+    const dialogContent = document.getElementById('dialogContent');
+    
+    dialogTitle.textContent = `Tipos de Solicitudes - ${appName}`;
+    dialogContent.innerHTML = '';
+    
+    tipos.forEach(tipo => {
+        const button = document.createElement('button');
+        button.className = 'btn btn-outline btn-block mb-4';
+        button.textContent = tipo;
+        button.onclick = () => showUsuarioOptions(appName, tipo);
+        dialogContent.appendChild(button);
+    });
+
+    // Agregar botón de regresar
+    const backButton = document.createElement('button');
+    backButton.className = 'btn btn-outline btn-block mb-4';
+    backButton.textContent = 'Regresar';
+    backButton.onclick = () => showUserManagementOptions(appName);
+    dialogContent.appendChild(backButton);
+}
+function showUsuarioOptions(appName, tipoSolicitud) {
+    let options;
+    switch(tipoSolicitud) {
+        case "Creación de Usuario":
+            options = colombiaContent.creacionUsuarioOptions[appName];
+            break;
+        case "Modificación de Usuario":
+            options = colombiaContent.modificacionUsuarioOptions[appName];
+            break;
+        case "Eliminación de Usuario":
+            options = colombiaContent.eliminacionUsuarioOptions[appName];
+            break;
+        case "Suspension de Usuario":
+            options = colombiaContent.suspensionUsuarioOptions[appName];
+            break;
+        case "Reactivacion de Usuario":
+            options = colombiaContent.reactivacionUsuarioOptions[appName];
+            break;
+        case "Reinicialización de contraseña":
+            options = colombiaContent.reinicializacionContraseña[appName];
+            break;
+        default:
+            options = [];
+    }
+
+    const dialogTitle = document.getElementById('dialogTitle');
+    const dialogContent = document.getElementById('dialogContent');
+    
+    dialogTitle.textContent = `${tipoSolicitud} - ${appName}`;
+    dialogContent.innerHTML = '';
+    
+    options.forEach(option => {
+        const button = document.createElement('button');
+        button.className = 'btn btn-outline btn-block mb-4';
+        button.textContent = option;
+        button.onclick = () => showUserTypeChecklist(appName, tipoSolicitud, option);
+        dialogContent.appendChild(button);
+    });
+
+    // Agregar botón de regresar
+    const backButton = document.createElement('button');
+    backButton.className = 'btn btn-outline btn-block mb-4';
+    backButton.textContent = 'Regresar';
+    backButton.onclick = () => showTiposSolicitudes(appName);
+    dialogContent.appendChild(backButton);
+}
+
+
+
+function showUserTypeChecklist(appName, tipoSolicitud, userType) {
+    const dialogContent = document.getElementById('dialogContent');
+    dialogContent.innerHTML = '';
+
+    const checklist = document.createElement('div');
+    checklist.className = 'checklist';
+    const checklistItems = colombiaContent.userTypeChecklists[appName][tipoSolicitud][userType] || [];
+    checklistItems.forEach((item, index) => {
+        const checklistItem = document.createElement('div');
+        checklistItem.className = 'checklist-item';
+        checklistItem.innerHTML = `
+            <input type="checkbox" id="item${index}" onchange="checkAllChecked('${appName}', '${tipoSolicitud}', '${userType}')">
+            <label for="item${index}">${item}</label>
+        `;
+        checklist.appendChild(checklistItem);
+    });
+
+    dialogContent.appendChild(checklist);
+
+    const successMessage = document.createElement('div');
+    successMessage.id = 'successMessage';
+    successMessage.className = 'success-message hidden';
+    successMessage.textContent = '¡Se puede escalar el formato!';
+    dialogContent.appendChild(successMessage);
+
+    // Agregar botón de regresar
+    const backButton = document.createElement('button');
+    backButton.className = 'btn btn-outline btn-block mt-4';
+    backButton.textContent = 'Regresar';
+    backButton.onclick = () => showUsuarioOptions(appName, tipoSolicitud);
+    dialogContent.appendChild(backButton);
+}
+
+function checkAllChecked(appName, tipoSolicitud, userType) {
+  const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+  const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+  const successMessage = document.getElementById('successMessage');
+  
+  if (allChecked) {
+    successMessage.classList.remove('hidden');
+  } else {
+    successMessage.classList.add('hidden');
+  }
+}
+
+function showGeneralidades(appName) {
+closeDialog();
+const generalidades = colombiaContent.generalidadesContent[appName];
+document.getElementById('generalidadesTitle').textContent = `Generalidades - ${appName}`;
+const generalidadesContent = document.getElementById('generalidadesContent');
+generalidadesContent.innerHTML = '';
+
+generalidades.forEach(section => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+        <div class="card-header">
+            <h3 class="card-title">${section.title}</h3>
+        </div>
+        <div class="card-content">
+            ${Array.isArray(section.content) 
+                ? section.content.map(item => `
+                    <div class="content-item">
+                        <div class="subtitle">${item.subtitle}</div>
+                        <div>${item.description}</div>
+                    </div>
+                  `).join('')
+                : `<p>${section.content}</p>`
+            }
+        </div>
+    `;
+    generalidadesContent.appendChild(card);
+});
+
+document.getElementById('mainContent').classList.add('hidden');
+document.getElementById('generalidadesPage').classList.remove('hidden');
+}
+
+function closeDialog() {
+document.getElementById('dialog').classList.add('hidden');
+}
+
+function goHome() {
+selectedCountry = null;
+selectedApp = null;
+selectedUserManagementApp = null;
+document.getElementById('countryContent').classList.add('hidden');
+document.getElementById('countrySelection').classList.remove('hidden');
+document.getElementById('mainTitle').textContent = 'CAS - Nuamx';
+}
+
+function goBackToMain() {
+document.getElementById('generalidadesPage').classList.add('hidden');
+document.getElementById('faqPage').classList.add('hidden');
+document.getElementById('faqAnswerPage').classList.add('hidden');
+document.getElementById('frequentLinksPage').classList.add('hidden');
+document.getElementById('individualAnswerPage').classList.add('hidden');
+document.getElementById('incidentDetailsPage').classList.add('hidden'); // Added to hide incident details page
+
+document.getElementById('mainContent').classList.remove('hidden');
+
+if (selectedCountry) {
+    document.getElementById('countryContent').classList.remove('hidden');
+    document.getElementById('countrySelection').classList.add('hidden');
+} else {
+    document.getElementById('countrySelection').classList.remove('hidden');
+    document.getElementById('countryContent').classList.add('hidden');
+}
+
+document.getElementById('mainTitle').textContent = selectedCountry 
+    ? `CAS - Nuamx - ${selectedCountry}` 
+    : 'CAS - Nuamx';
+}
+
+function showPage(page) {
+if (page === 'faq') {
+    showFAQ();
+} else if (page === 'links') {
+    showFrequentLinks();
+} else {
+    alert(`Mostrando página: ${page}`);
+}
+}
+
+async function showFAQ() {
+    await loadFAQFromExcel();
+    document.getElementById('mainContent').classList.add('hidden');
+    document.getElementById('faqPage').classList.remove('hidden');
+    const faqCategoriesContainer = document.getElementById('faqCategories');
+    faqCategoriesContainer.innerHTML = '';
+    faqCategories.forEach(category => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card-header">
+                <h2 class="card-title">${category}</h2>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-block" onclick="showFAQCategory('${category}')">Ver preguntas</button>
+            </div>
+        `;
+        faqCategoriesContainer.appendChild(card);
+    });
+}
+
+function showFAQCategory(category) {
+    document.getElementById('faqPage').classList.add('hidden');
+    document.getElementById('faqAnswerPage').classList.remove('hidden');
+    document.getElementById('faqCategoryTitle').textContent = category;
+    const faqAnswerList = document.getElementById('faqAnswerList');
+    faqAnswerList.innerHTML = '';
+
+    if (faqData[category]) {
+        faqData[category].forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'card mb-4';
+            card.innerHTML = `
+                <div class="card-header">
+                    <h3 class="card-title">${item.id} - ${item.question}</h3>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-block" onclick="showIndividualAnswer('${category}', ${index})">Ver respuesta</button>
+                </div>
+            `;
+            faqAnswerList.appendChild(card);
+        });
+    } else {
+        faqAnswerList.innerHTML = '<p>No hay preguntas disponibles para esta categoría.</p>';
+    }
+}
+
+function showIndividualAnswer(category, index) {
+    const item = faqData[category][index];
+    document.getElementById('mainContent').classList.add('hidden');
+    document.getElementById('faqPage').classList.add('hidden');
+    document.getElementById('faqAnswerPage').classList.add('hidden');
+    document.getElementById('individualAnswerPage').classList.remove('hidden');
+    document.getElementById('individualQuestionTitle').textContent = `${item.id} - ${item.question}`;
+    document.getElementById('individualAnswerContent').innerHTML = `<p>${item.answer}</p>`;
+}
+
+
+function goBackToFAQ() {
+    document.getElementById('individualAnswerPage').classList.add('hidden');
+    document.getElementById('faqAnswerPage').classList.remove('hidden');
+    document.getElementById('faqPage').classList.remove('hidden');
+    document.getElementById('mainContent').classList.add('hidden');
+}
+
+
+function goBackToFAQCategory() {
+document.getElementById('individualAnswerPage').classList.add('hidden');
+document.getElementById('faqAnswerPage').classList.remove('hidden');
+}
+
+
+
+function showFrequentLinks() {
+document.getElementById('mainContent').classList.add('hidden');
+document.getElementById('frequentLinksPage').classList.remove('hidden');
+const frequentLinksContent = document.getElementById('frequentLinksContent');
+frequentLinksContent.innerHTML = '';
+
+const sections = {
+    documentos: "Documentos y Bases de Datos",
+    sistemas: "Sistemas y Plataformas",
+    recursos: "Recursos y Herramientas"
+};
+
+Object.entries(sections).forEach(([key, title]) => {
+    const sectionDiv = document.createElement('div');
+    sectionDiv.className = 'link-section';
+    
+    const sectionTitle = document.createElement('h2');
+    sectionTitle.textContent = title;
+    sectionDiv.appendChild(sectionTitle);
+
+    const linksGrid = document.createElement('div');
+    linksGrid.className = 'links-grid';
+
+    frequentLinks[key].forEach(link => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <div class="card-header">
+                <h3 class="card-title flex items-center gap-2">
+                    <span class="text-2xl">${link.icon}</span>
+                    <span>${link.title}</span>
+                </h3>
+            </div>
+            <div class="card-content">
+                <p class="text-sm text-muted-foreground mb-4">${link.description}</p>
+                <button onclick="window.open('${link.url}', '_blank', 'noopener,noreferrer')" 
+                        class="btn btn-outline btn-block">
+                    Abrir enlace
+                </button>
+            </div>
+        `;
+        linksGrid.appendChild(card);
+    });
+
+    sectionDiv.appendChild(linksGrid);
+    frequentLinksContent.appendChild(sectionDiv);
+});
+}
+
+function hideAllPages() {
+  const pages = [
+    'mainContent',
+    'generalidadesPage',
+    'faqPage',
+    'faqAnswerPage',
+    'individualAnswerPage',
+    'frequentLinksPage',
+    'incidentDetailsPage'
+  ];
+  
+  pages.forEach(pageId => {
+    document.getElementById(pageId).classList.add('hidden');
+  });
+}
+
+function search() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const searchResults = document.getElementById('searchResults');
+    searchResults.innerHTML = '';
+    
+    if (!searchTerm) {
+        searchResults.classList.add('hidden');
+        return;
+    }
+    searchResults.classList.remove('hidden');
+
+    let results = [];
+
+    // Buscar en Enlaces Frecuentes
+    Object.entries(frequentLinks).forEach(([section, links]) => {
+        links.forEach(link => {
+            if (link.title.toLowerCase().includes(searchTerm) || 
+                link.description.toLowerCase().includes(searchTerm)) {
+                results.push({ 
+                    type: 'link', 
+                    section, 
+                    name: link.title,
+                    description: link.description,
+                    url: link.url 
+                });
+            }
+        });
+    });
+
+    // Buscar en el contenido de Colombia (si está seleccionado)
+    if (selectedCountry === 'Colombia') {
+        // Buscar en apps
+        colombiaContent.apps.forEach(app => {
+            if (app.name.toLowerCase().includes(searchTerm)) {
+                results.push({ type: 'app', name: app.name });
+            }
+            // Buscar en incidentes
+            app.incidents.forEach(incident => {
+                if (incident.toLowerCase().includes(searchTerm)) {
+                    results.push({ 
+                        type: 'incident', 
+                        name: incident, 
+                        app: app.name 
+                    });
+                }
+            });
+        });
+
+        // Buscar en generalidades
+        Object.entries(colombiaContent.generalidadesContent).forEach(([appName, sections]) => {
+            sections.forEach(section => {
+                if (section.title.toLowerCase().includes(searchTerm)) {
+                    results.push({ 
+                        type: 'generalidad', 
+                        name: section.title, 
+                        app: appName 
+                    });
+                }
+                if (Array.isArray(section.content)) {
+                    section.content.forEach(item => {
+                        if (item.subtitle.toLowerCase().includes(searchTerm) || 
+                            item.description.toLowerCase().includes(searchTerm)) {
+                            results.push({ 
+                                type: 'generalidad', 
+                                name: item.subtitle, 
+                                app: appName 
+                            });
+                        }
+                    });
+                } else if (typeof section.content === 'string' && 
+                        section.content.toLowerCase().includes(searchTerm)) {
+                    results.push({ 
+                        type: 'generalidad', 
+                        name: section.title, 
+                        app: appName 
+                    });
+                }
+            });
+        });
+
+        // Buscar en opciones de gestión de usuarios
+        Object.entries(colombiaContent.userManagementOptions).forEach(([app, options]) => {
+            options.forEach(option => {
+                if (option.toLowerCase().includes(searchTerm)) {
+                    results.push({ 
+                        type: 'option', 
+                        name: option, 
+                        app: app 
+                    });
+                }
+            });
+        });
+
+        // Buscar en tipos de solicitudes
+        Object.entries(colombiaContent.tiposSolicitudes).forEach(([app, tipos]) => {
+            tipos.forEach(tipo => {
+                if (tipo.toLowerCase().includes(searchTerm)) {
+                    results.push({ 
+                        type: 'solicitud', 
+                        name: tipo, 
+                        app: app 
+                    });
+                }
+            });
+        });
+    }
+
+    results.forEach(result => {
+        const div = document.createElement('div');
+        div.className = 'search-result-item';
+        
+        // Personalizar el texto según el tipo de resultado
+        let resultText = '';
+        switch(result.type) {
+            case 'link':
+                resultText = `${result.name} (Enlace en ${result.section})`;
+                break;
+            case 'faq':
+                resultText = `${result.question} (Pregunta Frecuente)`;
+                break;
+            default:
+                resultText = `${result.name} (${result.type}${result.app ? ` en ${result.app}` : ''})`;
+        }
+        
+        div.textContent = resultText;
+        div.onclick = () => {
+            searchResults.classList.add('hidden');
+            navigateToResult(result);
+        };
+        searchResults.appendChild(div);
+    });
+
+    if (results.length === 0) {
+        const div = document.createElement('div');
+        div.className = 'search-result-item';
+        div.textContent = 'No se encontraron resultados';
+        searchResults.appendChild(div);
+    }
+}
+
+function navigateToResult(result) {
+  const dialog = document.getElementById('dialog');
+  const mainContent = document.getElementById('mainContent');
+  const generalidadesPage = document.getElementById('generalidadesPage');
+  
+  switch (result.type) {
+    case 'link':
+      window.open(result.url, '_blank', 'noopener,noreferrer');
+      break;
+    case 'app':
+      showIncidents(result.name);
+      break;
+    case 'incident':
+      if (result.app === "Gestión de Usuarios") {
+        showUserManagementOptions(result.name);
+      } else {
+        showIncidentDetails(result.app, result.name);
+      }
+      break;
+    case 'generalidad':
+      mainContent.classList.add('hidden');
+      generalidadesPage.classList.remove('hidden');
+      showGeneralidades(result.app);
+      break;
+    case 'option':
+      showUserManagementOptions(result.app);
+      break;
+    case 'solicitud':
+      // Primero mostramos Gestión de Usuarios
+      showIncidents("Gestión de Usuarios");
+      // Luego seleccionamos la aplicación
+      setTimeout(() => {
+        showUserManagementOptions(result.app);
+        // Después mostramos los tipos de solicitudes
+        setTimeout(() => {
+          showTiposSolicitudes(result.app);
+          // Finalmente, si es un tipo específico de solicitud, lo seleccionamos
+          if (result.name.includes("Creación")) {
+            setTimeout(() => showUsuarioOptions(result.app, "Creación de Usuario"), 100);
+          } else if (result.name.includes("Modificación")) {
+            setTimeout(() => showUsuarioOptions(result.app, "Modificación de Usuario"), 100);
+          } else if (result.name.includes("Eliminación")) {
+            setTimeout(() => showUsuarioOptions(result.app, "Eliminación de Usuario"), 100);
+          } else if (result.name.includes("Suspensión")) {
+            setTimeout(() => showUsuarioOptions(result.app, "Suspension de Usuario"), 100);
+          } else if (result.name.includes("Reactivación")) {
+            setTimeout(() => showUsuarioOptions(result.app, "Reactivacion de Usuario"), 100);
+          } else if (result.name.includes("Reinicialización")) {
+            setTimeout(() => showUsuarioOptions(result.app, "Reinicialización de contraseña"), 100);
+          }
+        }, 100);
+      }, 100);
+      break;
+  }
+  
+  // Asegurarse que el diálogo de búsqueda se cierre
+  document.getElementById('searchResults').classList.add('hidden');
+}
+
+function searchFAQ() {
+const searchTerm = document.getElementById('faqSearchInput').value.toLowerCase();
+const searchResults = document.getElementById('faqSearchResults');
+faqSearchResults.innerHTML = '';
+faqSearchResults.classList.remove('hidden');
+
+let results = [];
+
+// Buscar en todas las categorías de FAQ
+Object.entries(faqData).forEach(([category, questions]) => {
+    questions.forEach((faq, index) => {
+        if (faq.id.toLowerCase().includes(searchTerm) ||
+            faq.question.toLowerCase().includes(searchTerm) || 
+            faq.answer.toLowerCase().includes(searchTerm)) {
+            results.push({ 
+                type: 'faq', 
+                category, 
+                index, 
+                id: faq.id,
+                question: faq.question 
+            });
+        }
+    });
+});
+
+results.forEach(result => {
+    const div = document.createElement('div');
+    div.className = 'search-result-item';
+    
+    // Personalizar el texto según el tipo de resultado
+    let resultText = '';
+    switch(result.type) {
+        case 'faq':
+            resultText = `${result.question} (Pregunta Frecuente)`;
+            break;
+        default:
+            resultText = `${result.name} (${result.type}${result.app ? ` en ${result.app}` : ''})`;
+    }
+    
+    div.textContent = resultText;
+    div.onclick = () => {
+    searchResults.classList.add('hidden');
+    showIndividualAnswer(result.category, result.index);
+    };
+    searchResults.appendChild(div);
+});
+
+if (results.length === 0) {
+    const div = document.createElement('div');
+    div.className = 'search-result-item';
+    div.textContent = 'No se encontraron resultados';
+    searchResults.appendChild(div);
+}
+
+}
+
+document.getElementById('searchInput').addEventListener('input', search);
+document.addEventListener('click', function(event) {
+    const searchResults = document.getElementById('searchResults');
+    const searchBar = document.querySelector('.search-bar');
+    if (!searchBar.contains(event.target)) {
+        searchResults.classList.add('hidden');
+    }
+});
+</script>
+</body>
+</html>
+
